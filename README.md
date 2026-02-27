@@ -4,13 +4,13 @@ An intelligent web application that analyzes satellite images using **Google Gem
 
 ## Features
 
-- 🛰️ **Satellite Image Upload** — Drag-and-drop or click to upload satellite imagery
-- 🤖 **AI Analysis** — Google Gemini 2.0 Flash evaluates terrain, infrastructure, environment, and more
-- 📊 **Interactive Dashboard** — Circular score gauge, horizontal bar charts, feature cards
-- 📄 **PDF Export** — Download a professional multi-page analysis report
-- 📋 **Analysis History** — Revisit past analyses stored in localStorage
-- 🌙 **Dark Theme** — Professional navy/dark UI with green accent
-- 📱 **Responsive** — Works on desktop and mobile
+- 🛰️ **Satellite Image Upload** - Drag-and-drop or click to upload satellite imagery
+- 🤖 **AI Analysis** - Google Gemini 2.0 Flash evaluates terrain, infrastructure, environment, and more
+- 📊 **Interactive Dashboard** - Circular score gauge, horizontal bar charts, feature cards
+- 📄 **PDF Export** - Download a professional multi-page analysis report
+- 📋 **Analysis History** - Revisit past analyses stored in localStorage
+- 🌙 **Dark Theme** - Professional navy/dark UI with green accent
+- 📱 **Responsive** - Works on desktop and mobile
 
 ## Tech Stack
 
