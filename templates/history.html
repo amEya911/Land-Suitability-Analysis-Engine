@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="history-container">
+    <!-- Empty state -->
+    <div id="emptyState" class="empty-state" style="display:none;">
+        <div class="empty-icon-wrap">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>
+        </div>
+        <h2>No analyses yet</h2>
+        <p>Upload a satellite image and run an analysis to see your history here.</p>
+    </div>
+
+    <!-- History list -->
+    <div id="historyContent" style="display:none;">
+        <div class="history-header">
+            <h2 class="section-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                Analysis History
+                <span id="historyCount" class="history-count"></span>
+            </h2>
+            <button id="clearAllBtn" class="clear-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Clear All
+            </button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    initHistoryPage();
+</script>
+{% endblock %}

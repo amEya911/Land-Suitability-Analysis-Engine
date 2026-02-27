@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-container" id="resultsContainer">
+    <!-- Top bar -->
+    <div class="results-topbar">
+        <a href="/" class="back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+            </svg>
+            New Analysis
+        </a>
+        <button id="exportPdfBtn" class="export-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export PDF
+        </button>
+    </div>
+
+    <!-- Satellite image preview -->
+    <div id="imagePreview" class="result-image-wrap" style="display:none;">
+        <img id="resultImage" class="result-image" alt="Analyzed satellite image" />
+        <div class="result-image-bar">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="m4.9 4.9 14.2 14.2" />
+            </svg>
+            <span>Analyzed satellite image</span>
+            <span id="resultTimestamp" class="ml-auto"></span>
+        </div>
+    </div>
+
+    <!-- No data state -->
+    <div id="noData" class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            class="empty-icon">
+            <circle cx="12" cy="12" r="10" />
+            <path d="m4.9 4.9 14.2 14.2" />
+        </svg>
+        <h2>No Analysis Data</h2>
+        <p>Please upload and analyze a satellite image first.</p>
+        <a href="/" class="btn-primary" style="display:inline-block;margin-top:1rem;text-decoration:none;">Go to
+            Upload</a>
+    </div>
+
+    <!-- Dashboard content (hidden until data loads) -->
+    <div id="dashboard" style="display:none;">
+        <!-- Location Summary -->
+        <section class="card">
+            <h2 class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                    <line x1="9" y1="3" x2="9" y2="18" />
+                    <line x1="15" y1="6" x2="15" y2="21" />
+                </svg> Location Summary</h2>
+            <p id="locationSummary" class="body-text">N/A</p>
+        </section>
+
+        <!-- Score row -->
+        <div class="score-grid">
+            <!-- Gauge -->
+            <div class="card gauge-card">
+                <h2 class="section-title center">Overall Suitability</h2>
+                <div class="gauge-wrap">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#1e293b" stroke-width="12" />
+                        <circle id="gaugeCircle" cx="100" cy="100" r="80" fill="none" stroke="#22c55e" stroke-width="12"
+                            stroke-dasharray="502.65" stroke-dashoffset="502.65" stroke-linecap="round"
+                            transform="rotate(-90 100 100)" style="transition:stroke-dashoffset 1.5s ease-out;" />
+                        <circle id="gaugeGlow" cx="100" cy="100" r="60" fill="rgba(34,197,94,0.12)" />
+                    </svg>
+                    <div class="gauge-text">
+                        <span id="gaugeScore" class="gauge-num">0.0</span>
+                        <span class="gauge-denom">/ 10</span>
+                    </div>
+                </div>
+                <div id="classificationBadge" class="classification-badge">N/A</div>
+            </div>
+
+            <!-- Bar charts -->
+            <div class="card">
+                <h2 class="section-title">Score Breakdown</h2>
+                <div class="bars-list">
+                    <div class="bar-row" id="barTerrain"><span class="bar-label"><svg width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                            </svg> Terrain</span>
+                        <div class="bar-track">
+                            <div class="bar-fill"></div>
+                        </div><span class="bar-value">0/10</span>
+                    </div>
+                    <div class="bar-row" id="barAccessibility"><span class="bar-label"><svg width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="2" />
+                                <path d="M12 2v4" />
+                                <path d="M12 18v4" />
+                                <path d="m4.93 4.93 2.83 2.83" />
+                                <path d="m16.24 16.24 2.83 2.83" />
+                                <path d="M2 12h4" />
+                                <path d="M18 12h4" />
+                                <path d="m4.93 19.07 2.83-2.83" />
+                                <path d="m16.24 7.76 2.83-2.83" />
+                            </svg> Accessibility</span>
+                        <div class="bar-track">
+                            <div class="bar-fill"></div>
+                        </div><span class="bar-value">0/10</span>
+                    </div>
+                    <div class="bar-row" id="barInfrastructure"><span class="bar-label"><svg width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                            </svg> Infrastructure</span>
+                        <div class="bar-track">
+                            <div class="bar-fill"></div>
+                        </div><span class="bar-value">0/10</span>
+                    </div>
+                    <div class="bar-row" id="barEnvRisk"><span class="bar-label"><svg width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg> Env. Risk</span>
+                        <div class="bar-track">
+                            <div class="bar-fill"></div>
+                        </div><span class="bar-value">0/10</span>
+                    </div>
+                    <div class="bar-row" id="barUrban"><span class="bar-label"><svg width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                                <path d="M9 22v-4h6v4" />
+                                <path d="M8 6h.01" />
+                                <path d="M16 6h.01" />
+                                <path d="M12 6h.01" />
+                                <path d="M12 10h.01" />
+                                <path d="M12 14h.01" />
+                                <path d="M16 10h.01" />
+                                <path d="M16 14h.01" />
+                                <path d="M8 10h.01" />
+                                <path d="M8 14h.01" />
+                            </svg> Urban Compat.</span>
+                        <div class="bar-track">
+                            <div class="bar-fill"></div>
+                        </div><span class="bar-value">0/10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detected Features -->
+        <section>
+            <h2 class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg> Detected Features</h2>
+            <div id="featureCards" class="feature-grid"></div>
+        </section>
+
+        <!-- Recommended Development -->
+        <section class="card card-accent">
+            <h2 class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                        d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                    <path d="M9 18h6" />
+                    <path d="M10 22h4" />
+                </svg> Recommended Development</h2>
+            <p id="recType" class="rec-type">N/A</p>
+            <p id="recJustification" class="body-text">N/A</p>
+        </section>
+
+        <!-- Prototype Plan -->
+        <section>
+            <h2 class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                    <path d="M9 22v-4h6v4" />
+                    <path d="M8 6h.01" />
+                    <path d="M16 6h.01" />
+                </svg> Prototype Development Plan</h2>
+            <div id="planCards" class="plan-grid"></div>
+        </section>
+
+        <!-- Limitations -->
+        <section id="limitationsSection" class="card card-warning" style="display:none;">
+            <h2 class="section-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg> Limitations</h2>
+            <p id="limitationsText" class="body-text"></p>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    initResultsPage();
+</script>
+{% endblock %}
