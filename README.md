@@ -1,4 +1,4 @@
-# Land Suitability Analysis — AI-Powered Web Application
+# Land Suitability Analysis - AI-Powered Web Application
 
 An intelligent web application that analyzes satellite images using **Google Gemini 2.0 Flash** to generate professional land development suitability reports.
 
@@ -85,7 +85,7 @@ Returns a JSON object with `location_summary`, `detected_features`, `scores`, `r
 ## File Structure
 
 ```
-aayush/
+file/
 ├── app.py              # Flask backend + Gemini API
 ├── requirements.txt    # Python dependencies
 ├── .env                # API key (not committed)
